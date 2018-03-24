@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: content: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+    </script>
+</head>
+<body>
+<style>
+.inputNumber {
+  font-size  :90px;
+  width      :80px;
+  text-align :right;
+  border     :0px;
+}
+</style>
+<form>
+<input type ="text" 
+       name ="min" 
+       id   ="min" 
+	   value="1"
+       class="inputNumber"	   
+	   />:
+<input type ="text" 
+       name ="sec" 
+	   id   ="sec" 
+	   value="5"
+       class="inputNumber"	   
+	   />	   
+</form>
+<button value="開始"
+        id   ="timerstart"
+		>開始</button>
+
+<script>
+var SECOND_MILLISECOND = 1000;
+var MINUTE_MILLISECOND = 60 * SECOND_MILLISECOND;
+var HOUR_MILLISECOND   = 60 * MINUTE_MILLISECOND;
+
+minDistance = function(src, dst) {
+    var deltaMillsecond = dst.getTime() - src.getTime();
+	console.log((deltaMillsecond % HOUR_MILLISECOND)/ MINUTE_MILLISECOND);
+	return parseInt((deltaMillsecond % HOUR_MILLISECOND)/ MINUTE_MILLISECOND);
+	
+    //return parseInt(deltaMillsecond / MINUTE_MILLISECOND);
+
+	};
+secondDistance = function (src, dst) {
+    var deltaMillsecond = dst.getTime() - src.getTime();
+    return parseInt((deltaMillsecond % MINUTE_MILLISECOND) /SECOND_MILLISECOND);
+};
+var valueset = function(){
+    var targetdate = new Date();
+    var justnow    = new Date();
+    targetdate.setMinutes(targetdate.getMinutes() + parseInt(document.getElementById('min').value));
+    targetdate.setSeconds(targetdate.getSeconds() + parseInt(document.getElementById('sec').value));
+    targetdate.setSeconds(targetdate.getSeconds() -1);
+	
+	if (targetdate <= justnow){
+	   clearInterval(valueset);
+	   document.write("終わり");
+	}
+	
+	//console.log("現在："+justnow.getMinutes() +":"+justnow.getSeconds());
+	//console.log("未来："+targetdate.getMinutes() + ':'+ targetdate.getSeconds());
+	
+    document.getElementById('min').value = minDistance(justnow, targetdate);
+    document.getElementById('sec').value = secondDistance(justnow , targetdate);
+}
+//valueset();
+var countdown;
+document.getElementById('timerstart').onclick=function(){
+  countdown = setInterval(valueset, 1000);
+};
+document.getElementById('min').onfocus=function(){
+  clearInterval(countdown);
+}
+document.getElementById('sec').onfocus=function(){
+  clearInterval(countdown);
+}
+
+
+</script>
+
+    
+    
+    
+    
+</body>
+</html>
